@@ -151,7 +151,7 @@ export default function PostJobPage() {
                 <label className="block text-sm font-medium mb-2">Description</label>
                 <textarea
                   name="description"
-                  placeholder="Describe the role, responsibilities, and what you're looking for..."
+                  placeholder="Describe the role, responsibilities..."
                   value={formData.description}
                   onChange={handleInputChange}
                   rows={6}

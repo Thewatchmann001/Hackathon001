@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-import { Search, Heart, TrendingUp, Users, ChevronRight } from "lucide-react"
+import { Search, Heart, TrendingUp, Users } from "lucide-react"
 
 export default function StartupsPage() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -123,9 +123,9 @@ export default function StartupsPage() {
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <div className="mb-12">
-            <h1 className="text-4xl font-bold mb-3">Startup Investment Marketplace</h1>
+            <h1 className="text-4xl font-bold mb-3">Discover Sierra Leone's Fastest-Growing Startups</h1>
             <p className="text-lg text-muted-foreground">
-              Discover promising Sierra Leonean startups and connect with innovation
+              Find innovative businesses seeking funding, partnerships, and visibility.
             </p>
           </div>
 
@@ -183,7 +183,7 @@ export default function StartupsPage() {
                     {startup.name}
                   </h3>
                 </Link>
-                <p className="text-sm text-accent font-medium mb-3">{startup.category}</p>
+                <p className="text-sm text-accent font-medium mb-3">Industry: {startup.category}</p>
 
                 <p className="text-sm text-muted-foreground mb-4 flex-1">{startup.problem}</p>
 
@@ -211,15 +211,14 @@ export default function StartupsPage() {
                   </div>
                   <div className="flex items-center gap-2 text-muted-foreground">
                     <TrendingUp size={16} className="text-accent" />
-                    {startup.stage}
+                    Stage: {startup.stage}
                   </div>
                 </div>
 
                 {/* CTA */}
                 <Link href={`/startups/${startup.id}`} className="w-full">
                   <Button className="w-full gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
-                    View Details
-                    <ChevronRight size={16} />
+                    View Profile →
                   </Button>
                 </Link>
               </Card>
@@ -228,7 +227,9 @@ export default function StartupsPage() {
 
           {filtered.length === 0 && (
             <Card className="p-12 text-center">
-              <p className="text-lg text-muted-foreground">No startups found matching your criteria.</p>
+              <p className="text-lg text-muted-foreground">
+                No startups found. Try a different category or check back soon.
+              </p>
             </Card>
           )}
         </div>

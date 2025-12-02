@@ -22,35 +22,20 @@ export function JobSidebar({
   onSalarySortingChange,
 }: JobSidebarProps) {
   const categories = [
-    "Technology",
-    "Healthcare",
+    "Engineering",
+    "ICT & Software",
     "Finance",
-    "Education",
     "Marketing",
     "Sales",
+    "Management",
     "Operations",
-    "Engineering",
-    "Design",
-    "Business Development",
-    "Customer Service",
-    "Hospitality",
+    "Healthcare",
+    "Education",
+    "Internships",
+    "Remote Jobs",
   ]
 
-  const locations = [
-    "Freetown",
-    "Bo",
-    "Kenema",
-    "Makeni",
-    "Port Loko",
-    "Koidu",
-    "Kailahun",
-    "Kabala",
-    "Lunsar",
-    "Remote",
-    "Hybrid",
-  ]
-
-  const jobTypes = ["Full-Time", "Part-Time", "Contract", "Freelance"]
+  const locations = ["Freetown", "Bo", "Kenema", "Makeni", "Port Loko", "Nationwide", "Remote"]
 
   return (
     <div className="p-6 space-y-6 sticky top-16 max-h-[calc(100vh-64px)] overflow-y-auto">
@@ -114,11 +99,26 @@ export function JobSidebar({
 
       <div className="border-t border-border pt-4" />
 
+      {/* Experience Level */}
+      <div>
+        <h3 className="font-semibold text-sm mb-3 text-foreground">Experience Level</h3>
+        <div className="space-y-2">
+          {["Entry Level", "Mid Level", "Senior Level", "Director / Executive"].map((level) => (
+            <label key={level} className="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors">
+              <input type="checkbox" className="rounded" />
+              <span className="text-sm">{level}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <div className="border-t border-border pt-4" />
+
       {/* Job Type */}
       <div>
         <h3 className="font-semibold text-sm mb-3 text-foreground">Job Type</h3>
         <div className="space-y-2">
-          {jobTypes.map((type) => (
+          {["Full-Time", "Part-Time", "Contract", "Internship", "Temporary"].map((type) => (
             <label key={type} className="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors">
               <input
                 type="radio"
@@ -141,44 +141,45 @@ export function JobSidebar({
 
       <div className="border-t border-border pt-4" />
 
-      {/* Salary Sort */}
+      {/* Salary Range */}
       <div>
-        <h3 className="font-semibold text-sm mb-3 text-foreground">Salary</h3>
+        <h3 className="font-semibold text-sm mb-3 text-foreground">Salary Range</h3>
         <div className="space-y-2">
-          <label className="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors">
-            <input
-              type="radio"
-              name="salary"
-              value="all"
-              checked={salarySorting === "all"}
-              onChange={(e) => onSalarySortingChange(e.target.value as "low" | "high" | "all")}
-              className="rounded"
-            />
-            <span className="text-sm">Any</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors">
-            <input
-              type="radio"
-              name="salary"
-              value="low"
-              checked={salarySorting === "low"}
-              onChange={(e) => onSalarySortingChange(e.target.value as "low" | "high" | "all")}
-              className="rounded"
-            />
-            <span className="text-sm">Low to High</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors">
-            <input
-              type="radio"
-              name="salary"
-              value="high"
-              checked={salarySorting === "high"}
-              onChange={(e) => onSalarySortingChange(e.target.value as "low" | "high" | "all")}
-              className="rounded"
-            />
-            <span className="text-sm">High to Low</span>
-          </label>
+          {[
+            { label: "1,000 – 2,000 SLL", value: "1000-2000" },
+            { label: "2,000 – 5,000 SLL", value: "2000-5000" },
+            { label: "5,000 – 10,000 SLL", value: "5000-10000" },
+            { label: "10,000+ SLL", value: "10000plus" },
+          ].map((range) => (
+            <label
+              key={range.value}
+              className="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors"
+            >
+              <input type="checkbox" className="rounded" />
+              <span className="text-sm">{range.label}</span>
+            </label>
+          ))}
         </div>
+      </div>
+
+      <div className="border-t border-border pt-4" />
+
+      {/* Buttons */}
+      <div className="flex gap-2">
+        <button className="flex-1 px-3 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90">
+          Apply Filters
+        </button>
+        <button
+          onClick={() => {
+            onCategoryChange("")
+            onLocationChange("")
+            onTypeChange("")
+            onSalarySortingChange("all")
+          }}
+          className="flex-1 px-3 py-2 border border-border rounded-lg text-sm font-medium hover:bg-card"
+        >
+          Reset Filters
+        </button>
       </div>
     </div>
   )

@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { MapPin, DollarSign, Users, Zap, ArrowRight } from "lucide-react"
+import { MapPin, DollarSign, Users, Zap } from "lucide-react"
 
 interface JobCardProps {
   job: {
@@ -83,14 +83,13 @@ export function JobCard({ job }: JobCardProps) {
               <Zap size={16} className="text-accent" />
               <span className="text-lg font-bold text-accent">{job.matchScore}%</span>
             </div>
-            <p className="text-xs text-muted-foreground">Match Score</p>
+            <p className="text-xs text-muted-foreground">Match</p>
           </div>
 
           {/* Apply Button */}
           <Link href={`/jobs/${job.id}`} className="w-full sm:w-auto">
             <Button className="w-full gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
-              View & Apply
-              <ArrowRight size={16} />
+              View Details →
             </Button>
           </Link>
         </div>

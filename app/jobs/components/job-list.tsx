@@ -119,9 +119,9 @@ export function JobList({ selectedCategory, selectedLocation, selectedType, sala
 
       {filteredJobs.length === 0 ? (
         <Card className="p-8 text-center">
-          <p className="text-muted-foreground">No jobs found matching your filters.</p>
-          <Button variant="link" className="mt-2" onClick={() => window.location.reload()}>
-            Clear filters
+          <p className="text-muted-foreground mb-4">No jobs match your filters.</p>
+          <Button variant="link" className="mt-2 text-primary" onClick={() => window.location.reload()}>
+            Try adjusting your search or reset the filters.
           </Button>
         </Card>
       ) : (

@@ -75,8 +75,8 @@ export default function EmployerDashboard() {
           {/* Header */}
           <div className="flex justify-between items-center mb-8">
             <div>
-              <h1 className="text-3xl font-bold">Employer Dashboard</h1>
-              <p className="text-muted-foreground mt-1">Manage jobs, review applicants, and find the perfect talent</p>
+              <h1 className="text-3xl font-bold">Welcome to Your Employer Hub</h1>
+              <p className="text-muted-foreground mt-1">Manage postings, edit roles, and track performance.</p>
             </div>
             <Link href="/employer/post-job">
               <Button className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
@@ -89,7 +89,7 @@ export default function EmployerDashboard() {
           <Tabs defaultValue="overview" className="space-y-6">
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="jobs">Active Jobs</TabsTrigger>
+              <TabsTrigger value="jobs">Your Jobs</TabsTrigger>
               <TabsTrigger value="applicants">Applicants</TabsTrigger>
             </TabsList>
 
@@ -175,7 +175,7 @@ export default function EmployerDashboard() {
             <TabsContent value="jobs" className="space-y-6">
               <Card className="p-6">
                 <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-xl font-semibold">Your Job Postings</h2>
+                  <h2 className="text-xl font-semibold">Manage postings, edit roles, and track performance.</h2>
                   <Link href="/employer/post-job">
                     <Button size="sm" className="gap-1 bg-primary text-primary-foreground hover:bg-primary/90">
                       <Plus size={14} />
@@ -248,7 +248,9 @@ export default function EmployerDashboard() {
             {/* Applicants Tab */}
             <TabsContent value="applicants" className="space-y-6">
               <Card className="p-6">
-                <h2 className="text-xl font-semibold mb-6">All Applicants</h2>
+                <h2 className="text-xl font-semibold mb-6">
+                  Review applications, shortlist candidates, and contact top talent.
+                </h2>
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>

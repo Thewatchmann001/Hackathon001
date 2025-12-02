@@ -92,8 +92,8 @@ export default function DashboardPage() {
           {/* Header */}
           <div className="flex justify-between items-center mb-8">
             <div>
-              <h1 className="text-3xl font-bold">Welcome, {userProfile.name}</h1>
-              <p className="text-muted-foreground mt-1">{userProfile.title}</p>
+              <h1 className="text-3xl font-bold">Welcome back, {userProfile.name}</h1>
+              <p className="text-muted-foreground mt-1">Here's what's happening with your job search today</p>
             </div>
             <Link href="/auth/login">
               <Button variant="outline" className="gap-2 bg-transparent">
@@ -135,7 +135,7 @@ export default function DashboardPage() {
                     <div className="flex items-start gap-4">
                       <Briefcase size={24} className="text-primary" />
                       <div>
-                        <p className="text-sm text-muted-foreground">Applications Sent</p>
+                        <p className="text-sm text-muted-foreground">Your Applications</p>
                         <p className="text-3xl font-bold text-primary">{applications.length}</p>
                       </div>
                     </div>
@@ -165,7 +165,7 @@ export default function DashboardPage() {
 
               {/* Recent Applications */}
               <Card className="p-6">
-                <h2 className="text-xl font-semibold mb-4">Recent Applications</h2>
+                <h2 className="text-xl font-semibold mb-4">Your Applications</h2>
                 <div className="space-y-3">
                   {applications.slice(0, 3).map((app) => (
                     <div
@@ -191,8 +191,8 @@ export default function DashboardPage() {
                   ))}
                 </div>
                 <Link href="#applications" onClick={() => setActiveTab("applications")}>
-                  <Button variant="link" className="mt-3">
-                    View all applications
+                  <Button variant="link" className="mt-3 text-primary">
+                    View all applications →
                   </Button>
                 </Link>
               </Card>

@@ -1,60 +1,70 @@
 "use client"
 
 import Link from "next/link"
+import { Heart } from "lucide-react"
 
 export function Footer() {
   return (
-    <footer className="w-full bg-card border-t border-border">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-          {/* Brand */}
-          <div>
-            <h3 className="font-bold text-lg text-primary mb-4">TrustBridge SL</h3>
-            <p className="text-sm text-muted-foreground">
-              Connecting Sierra Leone's talent to the right jobs, opportunities, and investors.
+    <footer className="w-full bg-gradient-to-b from-primary/5 to-background border-t border-primary/10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+          {/* Brand - Enhanced */}
+          <div className="space-y-4">
+            <h3 className="font-bold text-lg bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              TrustBridge SL
+            </h3>
+            <p className="text-sm text-foreground/70 leading-relaxed">
+              Empowering Sierra Leone's talent and ambition. Built by Sierra Leoneans, for Sierra Leoneans.
             </p>
+            <div className="flex items-center gap-2 text-sm text-primary font-semibold">
+              <Heart className="h-4 w-4 fill-primary" />
+              Made in Sierra Leone
+            </div>
           </div>
 
-          {/* Job Seekers */}
+          {/* For Job Seekers */}
           <div>
-            <h4 className="font-semibold text-sm mb-3">For Job Seekers</h4>
-            <ul className="space-y-2 text-sm">
+            <h4 className="font-semibold text-sm mb-4 text-foreground">For Job Seekers</h4>
+            <ul className="space-y-3 text-sm">
               <li>
-                <Link href="/jobs" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/jobs" className="text-foreground/70 hover:text-primary transition-colors font-medium">
                   Search Jobs
                 </Link>
               </li>
               <li>
-                <Link href="/cv-maker" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/cv-maker" className="text-foreground/70 hover:text-primary transition-colors font-medium">
                   Create CV
                 </Link>
               </li>
               <li>
-                <Link href="/dashboard" className="text-muted-foreground hover:text-primary transition-colors">
-                  Dashboard
+                <Link href="/dashboard" className="text-foreground/70 hover:text-primary transition-colors font-medium">
+                  My Dashboard
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Employers */}
+          {/* For Employers */}
           <div>
-            <h4 className="font-semibold text-sm mb-3">For Employers</h4>
-            <ul className="space-y-2 text-sm">
+            <h4 className="font-semibold text-sm mb-4 text-foreground">For Employers</h4>
+            <ul className="space-y-3 text-sm">
               <li>
-                <Link href="/employer" className="text-muted-foreground hover:text-primary transition-colors">
-                  Employer Dashboard
+                <Link href="/employer" className="text-foreground/70 hover:text-primary transition-colors font-medium">
+                  Dashboard
                 </Link>
               </li>
               <li>
-                <Link href="/employer/post-job" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link
+                  href="/employer/post-job"
+                  className="text-foreground/70 hover:text-primary transition-colors font-medium"
+                >
                   Post a Job
                 </Link>
               </li>
               <li>
                 <Link
                   href="/employer/applicants/1"
-                  className="text-muted-foreground hover:text-primary transition-colors"
+                  className="text-foreground/70 hover:text-primary transition-colors font-medium"
                 >
                   View Applicants
                 </Link>
@@ -62,27 +72,38 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Startups */}
+          {/* For Startups */}
           <div>
-            <h4 className="font-semibold text-sm mb-3">For Startups</h4>
-            <ul className="space-y-2 text-sm">
+            <h4 className="font-semibold text-sm mb-4 text-foreground">For Startups</h4>
+            <ul className="space-y-3 text-sm">
               <li>
-                <Link href="/startups" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/startups" className="text-foreground/70 hover:text-primary transition-colors font-medium">
                   Marketplace
                 </Link>
               </li>
               <li>
-                <Link href="/auth/register" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link
+                  href="/auth/register"
+                  className="text-foreground/70 hover:text-primary transition-colors font-medium"
+                >
                   Register Startup
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/auth/login"
+                  className="text-foreground/70 hover:text-primary transition-colors font-medium"
+                >
+                  Investor Login
                 </Link>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="border-t border-border pt-8">
-          <p className="text-center text-sm text-muted-foreground">
-            © 2025 TrustBridge SL. Empowering Sierra Leone's workforce.
+        <div className="border-t border-primary/10 pt-8">
+          <p className="text-center text-sm text-foreground/60">
+            © 2025 TrustBridge SL. Empowering Sierra Leone's workforce and innovation ecosystem.
           </p>
         </div>
       </div>

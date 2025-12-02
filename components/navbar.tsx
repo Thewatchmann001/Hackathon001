@@ -38,11 +38,14 @@ export function Navbar() {
   const links = getDynamicLinks()
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-background border-b border-border">
+    <nav className="sticky top-0 z-50 w-full bg-background border-b border-primary/20 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <Link href="/" className="font-bold text-xl text-primary">
+          {/* Logo - Enhanced */}
+          <Link
+            href="/"
+            className="font-bold text-xl bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent"
+          >
             TrustBridge SL
           </Link>
 
@@ -52,7 +55,7 @@ export function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-foreground hover:text-primary transition-colors"
+                className="text-sm font-semibold text-foreground hover:text-primary transition-colors duration-200"
               >
                 {link.label}
               </Link>
@@ -63,10 +66,14 @@ export function Navbar() {
           <div className="hidden md:flex items-center gap-3">
             {isLoggedIn ? (
               <>
-                <span className="text-sm text-muted-foreground capitalize">
+                <span className="text-sm text-foreground/60 capitalize font-medium">
                   {userType === "seeker" ? "Job Seeker" : userType === "employer" ? "Employer" : "Startup"}
                 </span>
-                <Button variant="outline" className="font-medium bg-transparent gap-2" onClick={logout}>
+                <Button
+                  variant="outline"
+                  className="font-semibold bg-transparent gap-2 border-primary/30 hover:bg-primary/5"
+                  onClick={logout}
+                >
                   <LogOut size={16} />
                   Sign Out
                 </Button>
@@ -74,12 +81,15 @@ export function Navbar() {
             ) : (
               <>
                 <Link href="/auth/login">
-                  <Button variant="outline" className="font-medium bg-transparent">
+                  <Button
+                    variant="outline"
+                    className="font-semibold bg-transparent border-primary/30 hover:bg-primary/5"
+                  >
                     Sign In
                   </Button>
                 </Link>
                 <Link href="/auth/register">
-                  <Button className="font-medium bg-primary text-primary-foreground hover:bg-primary/90">
+                  <Button className="font-semibold bg-primary text-primary-foreground hover:bg-primary/90 shadow-md">
                     Get Started
                   </Button>
                 </Link>
@@ -93,52 +103,53 @@ export function Navbar() {
           </button>
         </div>
 
-        {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden pb-4 border-t border-border pt-4">
-            <div className="flex flex-col gap-3">
-              {links.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-sm font-medium text-foreground hover:text-primary transition-colors py-2"
-                >
-                  {link.label}
-                </Link>
-              ))}
-              <div className="border-t border-border pt-3 mt-3 flex flex-col gap-2">
-                {isLoggedIn ? (
-                  <>
-                    <span className="text-sm text-muted-foreground capitalize px-3">
-                      {userType === "seeker" ? "Job Seeker" : userType === "employer" ? "Employer" : "Startup"}
-                    </span>
+          <div className="md:hidden pb-4 border-t border-primary/10 pt-4 space-y-3">
+            {links.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="block text-sm font-semibold text-foreground hover:text-primary transition-colors py-2"
+                onClick={() => setIsOpen(false)}
+              >
+                {link.label}
+              </Link>
+            ))}
+            <div className="border-t border-primary/10 pt-3 mt-3 flex flex-col gap-2">
+              {isLoggedIn ? (
+                <>
+                  <span className="text-sm text-foreground/60 capitalize px-3 font-medium">
+                    {userType === "seeker" ? "Job Seeker" : userType === "employer" ? "Employer" : "Startup"}
+                  </span>
+                  <Button
+                    variant="outline"
+                    className="w-full font-semibold bg-transparent border-primary/30 hover:bg-primary/5 gap-2"
+                    onClick={() => {
+                      logout()
+                      setIsOpen(false)
+                    }}
+                  >
+                    <LogOut size={16} />
+                    Sign Out
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Link href="/auth/login" className="w-full">
                     <Button
                       variant="outline"
-                      className="w-full font-medium bg-transparent gap-2"
-                      onClick={() => {
-                        logout()
-                        setIsOpen(false)
-                      }}
+                      className="w-full font-semibold bg-transparent border-primary/30 hover:bg-primary/5"
                     >
-                      <LogOut size={16} />
-                      Sign Out
+                      Sign In
                     </Button>
-                  </>
-                ) : (
-                  <>
-                    <Link href="/auth/login" className="w-full">
-                      <Button variant="outline" className="w-full font-medium bg-transparent">
-                        Sign In
-                      </Button>
-                    </Link>
-                    <Link href="/auth/register" className="w-full">
-                      <Button className="w-full font-medium bg-primary text-primary-foreground hover:bg-primary/90">
-                        Get Started
-                      </Button>
-                    </Link>
-                  </>
-                )}
-              </div>
+                  </Link>
+                  <Link href="/auth/register" className="w-full">
+                    <Button className="w-full font-semibold bg-primary text-primary-foreground hover:bg-primary/90">
+                      Get Started
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         )}

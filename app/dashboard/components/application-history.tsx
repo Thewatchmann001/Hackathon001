@@ -44,7 +44,9 @@ export function ApplicationHistory({ applications }: ApplicationHistoryProps) {
     <Card className="p-6">
       <h2 className="text-2xl font-bold mb-6">Application History</h2>
       {applications.length === 0 ? (
-        <p className="text-center text-muted-foreground py-8">No applications yet. Start applying to jobs!</p>
+        <p className="text-center text-muted-foreground py-8">
+          No applications yet. Start applying to personalized opportunities.
+        </p>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full">
