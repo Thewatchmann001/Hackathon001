@@ -1,12 +1,15 @@
 "use client"
 
+import type React from "react"
+
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Briefcase, Users, TrendingUp, Plus, Edit2, Trash2, Eye, MessageSquare, Zap } from "lucide-react"
+import { Briefcase, Users, TrendingUp, Plus, Edit2, Trash2, Eye, MessageSquare, Zap, Upload } from "lucide-react"
+import { useState, useEffect } from "react"
 
 export default function EmployerDashboard() {
   const jobs = [
@@ -66,6 +69,27 @@ export default function EmployerDashboard() {
     },
   ]
 
+  const [companyLogo, setCompanyLogo] = useState<string>("")
+
+  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const file = e.target.files[0]
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        setCompanyLogo(event.target?.result as string)
+        localStorage.setItem("companyLogo", event.target?.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  useEffect(() => {
+    const saved = localStorage.getItem("companyLogo")
+    if (saved) {
+      setCompanyLogo(saved)
+    }
+  }, [])
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -75,6 +99,9 @@ export default function EmployerDashboard() {
           {/* Header */}
           <div className="flex justify-between items-center mb-8">
             <div>
+              {companyLogo && (
+                <img src={companyLogo || "/placeholder.svg"} alt="Company Logo" className="h-12 mb-2 object-contain" />
+              )}
               <h1 className="text-3xl font-bold">Welcome to Your Employer Hub</h1>
               <p className="text-muted-foreground mt-1">Manage postings, edit roles, and track performance.</p>
             </div>
@@ -87,10 +114,11 @@ export default function EmployerDashboard() {
           </div>
 
           <Tabs defaultValue="overview" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="jobs">Your Jobs</TabsTrigger>
               <TabsTrigger value="applicants">Applicants</TabsTrigger>
+              <TabsTrigger value="settings">Settings</TabsTrigger>
             </TabsList>
 
             {/* Overview Tab */}
@@ -295,6 +323,45 @@ export default function EmployerDashboard() {
                       ))}
                     </tbody>
                   </table>
+                </div>
+              </Card>
+            </TabsContent>
+
+            {/* Settings Tab */}
+            <TabsContent value="settings" className="space-y-6">
+              <Card className="p-6">
+                <h2 className="text-2xl font-semibold mb-6">Company Settings</h2>
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">Upload Company Logo</h3>
+                    <div className="border-2 border-dashed border-border rounded-lg p-8 hover:border-primary transition-colors cursor-pointer">
+                      <input
+                        type="file"
+                        id="company-logo"
+                        accept="image/*"
+                        onChange={handleLogoUpload}
+                        className="hidden"
+                      />
+                      <label htmlFor="company-logo" className="cursor-pointer flex flex-col items-center gap-3">
+                        {companyLogo ? (
+                          <>
+                            <img
+                              src={companyLogo || "/placeholder.svg"}
+                              alt="Company Logo"
+                              className="w-40 h-20 object-contain"
+                            />
+                            <p className="text-sm text-muted-foreground">Click to change logo</p>
+                          </>
+                        ) : (
+                          <>
+                            <Upload size={40} className="text-muted-foreground" />
+                            <p className="text-sm font-medium">Upload Your Company Logo</p>
+                            <p className="text-xs text-muted-foreground">PNG, JPG, SVG (Max 5MB)</p>
+                          </>
+                        )}
+                      </label>
+                    </div>
+                  </div>
                 </div>
               </Card>
             </TabsContent>

@@ -15,6 +15,7 @@ interface CVData {
   email: string
   phone: string
   location: string
+  profileImage: string
   summary: string
   experience: Array<{ title: string; company: string; duration: string; description: string }>
   education: Array<{ school: string; degree: string; field: string; year: string }>
@@ -27,6 +28,7 @@ const defaultCVData: CVData = {
   email: "",
   phone: "",
   location: "",
+  profileImage: "",
   summary: "",
   experience: [{ title: "", company: "", duration: "", description: "" }],
   education: [{ school: "", degree: "", field: "", year: "" }],
@@ -83,6 +85,17 @@ export default function CVMakerPage() {
       return
     }
     setMode("preview")
+  }
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const file = e.target.files[0]
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        setCVData((prev) => ({ ...prev, profileImage: event.target?.result as string }))
+      }
+      reader.readAsDataURL(file)
+    }
   }
 
   return (
@@ -166,6 +179,7 @@ export default function CVMakerPage() {
               onAddEducation={addEducation}
               onPreview={handleGeneratePreview}
               onBack={() => setMode("select")}
+              onImageUpload={handleImageUpload}
             />
           ) : mode === "upload" ? (
             <CVUploadForm onBack={() => setMode("select")} />
@@ -188,6 +202,7 @@ function CVCreateForm({
   onAddEducation,
   onPreview,
   onBack,
+  onImageUpload,
 }: {
   formData: CVData
   onInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
@@ -196,6 +211,7 @@ function CVCreateForm({
   onAddEducation: () => void
   onPreview: () => void
   onBack: () => void
+  onImageUpload: (e: React.ChangeEvent<HTMLInputElement>) => void
 }) {
   return (
     <form className="space-y-8">
@@ -204,6 +220,32 @@ function CVCreateForm({
         <Button variant="outline" onClick={onBack} type="button">
           Back
         </Button>
+      </div>
+
+      {/* Profile Picture */}
+      <div className="bg-card p-6 rounded-lg border border-border space-y-4">
+        <h3 className="text-xl font-semibold">Profile Picture</h3>
+        <div className="border-2 border-dashed border-border rounded-lg p-6 hover:border-primary transition-colors cursor-pointer">
+          <input type="file" id="profile-image" accept="image/*" onChange={onImageUpload} className="hidden" />
+          <label htmlFor="profile-image" className="cursor-pointer flex flex-col items-center gap-2">
+            {formData.profileImage ? (
+              <>
+                <img
+                  src={formData.profileImage || "/placeholder.svg"}
+                  alt="Profile"
+                  className="w-24 h-24 rounded-full object-cover"
+                />
+                <p className="text-sm text-muted-foreground">Click to change picture</p>
+              </>
+            ) : (
+              <>
+                <Upload size={32} className="text-muted-foreground" />
+                <p className="text-sm font-medium">Upload Profile Picture</p>
+                <p className="text-xs text-muted-foreground">JPG, PNG (Max 5MB)</p>
+              </>
+            )}
+          </label>
+        </div>
       </div>
 
       {/* Personal Information */}

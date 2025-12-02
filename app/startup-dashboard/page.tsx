@@ -9,7 +9,7 @@ import { Card } from "@/components/ui/card"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Building2, Users, DollarSign, Edit2, LogOut, Plus } from "lucide-react"
+import { Building2, Users, DollarSign, Edit2, LogOut, Plus, Upload } from "lucide-react"
 import { useAuth } from "@/lib/auth-context"
 import { useRouter } from "next/navigation"
 
@@ -35,6 +35,7 @@ export default function StartupDashboardPage() {
     phone: "",
     website: "",
     location: "Freetown",
+    logo: "",
   })
 
   useEffect(() => {
@@ -87,6 +88,17 @@ export default function StartupDashboardPage() {
     }))
   }
 
+  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const file = e.target.files[0]
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        setStartupData((prev) => ({ ...prev, logo: event.target?.result as string }))
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
   const fundingProgress = (current: number, needed: number) => (current / needed) * 100
 
   return (
@@ -127,6 +139,37 @@ export default function StartupDashboardPage() {
 
             {/* Profile Tab */}
             <TabsContent value="profile" className="space-y-6">
+              <Card className="p-6">
+                <h2 className="text-2xl font-semibold mb-6">Upload Your Logo</h2>
+                <div className="border-2 border-dashed border-border rounded-lg p-8 hover:border-primary transition-colors cursor-pointer">
+                  <input
+                    type="file"
+                    id="startup-logo"
+                    accept="image/*"
+                    onChange={handleLogoUpload}
+                    className="hidden"
+                  />
+                  <label htmlFor="startup-logo" className="cursor-pointer flex flex-col items-center gap-3">
+                    {startupData.logo ? (
+                      <>
+                        <img
+                          src={startupData.logo || "/placeholder.svg"}
+                          alt="Logo"
+                          className="w-32 h-32 object-contain"
+                        />
+                        <p className="text-sm text-muted-foreground">Click to change logo</p>
+                      </>
+                    ) : (
+                      <>
+                        <Upload size={40} className="text-muted-foreground" />
+                        <p className="text-sm font-medium">Upload Your Startup Logo</p>
+                        <p className="text-xs text-muted-foreground">PNG, JPG, SVG (Max 5MB)</p>
+                      </>
+                    )}
+                  </label>
+                </div>
+              </Card>
+
               <Card className="p-6">
                 <h2 className="text-2xl font-semibold mb-6">Edit Startup Profile</h2>
                 <form className="space-y-6">
@@ -273,7 +316,7 @@ export default function StartupDashboardPage() {
                         value={startupData.website}
                         onChange={handleInputChange}
                         placeholder="https://example.com"
-                        className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                        className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                       />
                     </div>
                   </div>
@@ -324,7 +367,7 @@ export default function StartupDashboardPage() {
                         name="fundingNeeded"
                         value={startupData.fundingNeeded}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                        className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                       />
                     </div>
                     <div>
@@ -334,7 +377,7 @@ export default function StartupDashboardPage() {
                         name="currentFunding"
                         value={startupData.currentFunding}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                        className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                       />
                     </div>
                   </div>

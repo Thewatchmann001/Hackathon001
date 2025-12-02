@@ -9,6 +9,7 @@ interface CVData {
   email: string
   phone: string
   location: string
+  profileImage: string
   summary: string
   experience: Array<{ title: string; company: string; duration: string; description: string }>
   education: Array<{ school: string; degree: string; field: string; year: string }>
@@ -41,8 +42,17 @@ export function CVPreview({ data }: { data: CVData }) {
       <Card className="p-12 bg-white text-black max-w-4xl mx-auto shadow-lg">
         {/* Header */}
         <div className="border-b-2 border-primary pb-6 mb-6">
-          <h1 className="text-4xl font-bold text-primary mb-1">{data.fullName || "Your Name"}</h1>
-          <div className="flex flex-wrap gap-4 text-sm text-gray-600">
+          {data.profileImage && (
+            <div className="mb-4 flex justify-center">
+              <img
+                src={data.profileImage || "/placeholder.svg"}
+                alt={data.fullName}
+                className="w-32 h-32 rounded-full object-cover border-4 border-primary"
+              />
+            </div>
+          )}
+          <h1 className="text-4xl font-bold text-primary mb-1 text-center">{data.fullName || "Your Name"}</h1>
+          <div className="flex flex-wrap gap-4 text-sm text-gray-600 justify-center">
             {data.email && <span>{data.email}</span>}
             {data.phone && <span>•</span>}
             {data.phone && <span>{data.phone}</span>}
