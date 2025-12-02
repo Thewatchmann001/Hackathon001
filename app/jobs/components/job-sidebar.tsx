@@ -21,9 +21,34 @@ export function JobSidebar({
   onTypeChange,
   onSalarySortingChange,
 }: JobSidebarProps) {
-  const categories = ["Technology", "Healthcare", "Finance", "Education", "Marketing", "Sales", "Operations"]
+  const categories = [
+    "Technology",
+    "Healthcare",
+    "Finance",
+    "Education",
+    "Marketing",
+    "Sales",
+    "Operations",
+    "Engineering",
+    "Design",
+    "Business Development",
+    "Customer Service",
+    "Hospitality",
+  ]
 
-  const locations = ["Freetown", "Bo", "Kenema", "Makeni", "Remote", "Hybrid"]
+  const locations = [
+    "Freetown",
+    "Bo",
+    "Kenema",
+    "Makeni",
+    "Port Loko",
+    "Koidu",
+    "Kailahun",
+    "Kabala",
+    "Lunsar",
+    "Remote",
+    "Hybrid",
+  ]
 
   const jobTypes = ["Full-Time", "Part-Time", "Contract", "Freelance"]
 

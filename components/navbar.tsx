@@ -3,19 +3,39 @@
 import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Menu, X } from "lucide-react"
+import { Menu, X, LogOut } from "lucide-react"
+import { useAuth } from "@/lib/auth-context"
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
+  const { userType, isLoggedIn, logout } = useAuth()
 
-  const links = [
+  // Base links visible to all users
+  const baseLinks = [
     { label: "Home", href: "/" },
     { label: "Search Jobs", href: "/jobs" },
-    { label: "CV Maker", href: "/cv-maker" },
-    { label: "Dashboard", href: "/dashboard" },
-    { label: "For Employers", href: "/employer" },
     { label: "Startups", href: "/startups" },
   ]
+
+  // Conditional links based on user type
+  const getDynamicLinks = () => {
+    const links = [...baseLinks]
+
+    if (isLoggedIn) {
+      if (userType === "seeker") {
+        links.splice(2, 0, { label: "CV Maker", href: "/cv-maker" })
+        links.push({ label: "My Dashboard", href: "/dashboard" })
+      } else if (userType === "employer") {
+        links.push({ label: "Employer Dashboard", href: "/employer" })
+      }
+    } else {
+      links.splice(2, 0, { label: "CV Maker", href: "/cv-maker" })
+    }
+
+    return links
+  }
+
+  const links = getDynamicLinks()
 
   return (
     <nav className="sticky top-0 z-50 w-full bg-background border-b border-border">
@@ -39,18 +59,32 @@ export function Navbar() {
             ))}
           </div>
 
-          {/* Auth Buttons */}
+          {/* Auth Buttons / User Menu */}
           <div className="hidden md:flex items-center gap-3">
-            <Link href="/auth/login">
-              <Button variant="outline" className="font-medium bg-transparent">
-                Sign In
-              </Button>
-            </Link>
-            <Link href="/auth/register">
-              <Button className="font-medium bg-primary text-primary-foreground hover:bg-primary/90">
-                Get Started
-              </Button>
-            </Link>
+            {isLoggedIn ? (
+              <>
+                <span className="text-sm text-muted-foreground capitalize">
+                  {userType === "seeker" ? "Job Seeker" : userType === "employer" ? "Employer" : "Startup"}
+                </span>
+                <Button variant="outline" className="font-medium bg-transparent gap-2" onClick={logout}>
+                  <LogOut size={16} />
+                  Sign Out
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link href="/auth/login">
+                  <Button variant="outline" className="font-medium bg-transparent">
+                    Sign In
+                  </Button>
+                </Link>
+                <Link href="/auth/register">
+                  <Button className="font-medium bg-primary text-primary-foreground hover:bg-primary/90">
+                    Get Started
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -72,17 +106,38 @@ export function Navbar() {
                   {link.label}
                 </Link>
               ))}
-              <div className="flex gap-2 pt-3 border-t border-border">
-                <Link href="/auth/login" className="flex-1">
-                  <Button variant="outline" className="w-full font-medium bg-transparent">
-                    Sign In
-                  </Button>
-                </Link>
-                <Link href="/auth/register" className="flex-1">
-                  <Button className="w-full font-medium bg-primary text-primary-foreground hover:bg-primary/90">
-                    Get Started
-                  </Button>
-                </Link>
+              <div className="border-t border-border pt-3 mt-3 flex flex-col gap-2">
+                {isLoggedIn ? (
+                  <>
+                    <span className="text-sm text-muted-foreground capitalize px-3">
+                      {userType === "seeker" ? "Job Seeker" : userType === "employer" ? "Employer" : "Startup"}
+                    </span>
+                    <Button
+                      variant="outline"
+                      className="w-full font-medium bg-transparent gap-2"
+                      onClick={() => {
+                        logout()
+                        setIsOpen(false)
+                      }}
+                    >
+                      <LogOut size={16} />
+                      Sign Out
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Link href="/auth/login" className="w-full">
+                      <Button variant="outline" className="w-full font-medium bg-transparent">
+                        Sign In
+                      </Button>
+                    </Link>
+                    <Link href="/auth/register" className="w-full">
+                      <Button className="w-full font-medium bg-primary text-primary-foreground hover:bg-primary/90">
+                        Get Started
+                      </Button>
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </div>

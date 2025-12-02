@@ -4,13 +4,17 @@ import type React from "react"
 
 import { useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { Mail, Lock, User, ArrowRight } from "lucide-react"
+import { useAuth } from "@/lib/auth-context"
 
 export default function RegisterPage() {
+  const router = useRouter()
+  const { setUser } = useAuth()
   const [userType, setUserType] = useState<"seeker" | "employer" | "startup">("seeker")
   const [formData, setFormData] = useState({
     name: "",
@@ -31,7 +35,18 @@ export default function RegisterPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    alert(`Registering as ${userType}...`)
+
+    // Set user in auth context
+    setUser(userType)
+
+    // Redirect based on user type
+    if (userType === "seeker") {
+      router.push("/dashboard")
+    } else if (userType === "employer") {
+      router.push("/employer")
+    } else {
+      router.push("/startups")
+    }
   }
 
   return (
