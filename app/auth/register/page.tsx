@@ -22,6 +22,7 @@ export default function RegisterPage() {
     password: "",
     confirmPassword: "",
     company: "",
+    startupDescription: "",
     agreed: false,
   })
 
@@ -105,6 +106,22 @@ export default function RegisterPage() {
                     name="company"
                     placeholder="Company name"
                     value={formData.company}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                    required
+                  />
+                </div>
+              )}
+
+              {/* Startup Description (for startups) */}
+              {userType === "startup" && (
+                <div>
+                  <label className="block text-sm font-medium mb-2">Startup Description</label>
+                  <input
+                    type="text"
+                    name="startupDescription"
+                    placeholder="Tell us about your startup"
+                    value={formData.startupDescription}
                     onChange={handleInputChange}
                     className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                     required

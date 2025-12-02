@@ -2,22 +2,95 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-import { Plus, Upload, FileText, ArrowRight } from "lucide-react"
+import { Plus, Upload, FileText, ArrowRight, Save } from "lucide-react"
+import { CVPreview } from "./components/cv-preview"
+
+interface CVData {
+  fullName: string
+  email: string
+  phone: string
+  location: string
+  summary: string
+  experience: Array<{ title: string; company: string; duration: string; description: string }>
+  education: Array<{ school: string; degree: string; field: string; year: string }>
+  skills: string
+  certifications: string
+}
+
+const defaultCVData: CVData = {
+  fullName: "",
+  email: "",
+  phone: "",
+  location: "",
+  summary: "",
+  experience: [{ title: "", company: "", duration: "", description: "" }],
+  education: [{ school: "", degree: "", field: "", year: "" }],
+  skills: "",
+  certifications: "",
+}
 
 export default function CVMakerPage() {
-  const [mode, setMode] = useState<"select" | "create" | "upload">("select")
+  const [mode, setMode] = useState<"select" | "create" | "upload" | "preview">("select")
+  const [cvData, setCVData] = useState<CVData>(defaultCVData)
+
+  useEffect(() => {
+    const saved = localStorage.getItem("cvData")
+    if (saved) {
+      setCVData(JSON.parse(saved))
+    }
+  }, [])
+
+  useEffect(() => {
+    if (cvData.fullName) {
+      localStorage.setItem("cvData", JSON.stringify(cvData))
+    }
+  }, [cvData])
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setCVData((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const handleArrayChange = (index: number, field: string, value: string, category: "experience" | "education") => {
+    setCVData((prev) => ({
+      ...prev,
+      [category]: prev[category].map((item, i) => (i === index ? { ...item, [field]: value } : item)),
+    }))
+  }
+
+  const addExperience = () => {
+    setCVData((prev) => ({
+      ...prev,
+      experience: [...prev.experience, { title: "", company: "", duration: "", description: "" }],
+    }))
+  }
+
+  const addEducation = () => {
+    setCVData((prev) => ({
+      ...prev,
+      education: [...prev.education, { school: "", degree: "", field: "", year: "" }],
+    }))
+  }
+
+  const handleGeneratePreview = () => {
+    if (!cvData.fullName) {
+      alert("Please enter at least your name to generate a preview")
+      return
+    }
+    setMode("preview")
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
 
       <div className="flex-1 px-4 sm:px-6 lg:px-8 py-12 bg-background">
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           {mode === "select" ? (
             <>
               <div className="text-center mb-12">
@@ -34,7 +107,7 @@ export default function CVMakerPage() {
                   <Plus size={32} className="text-primary mb-4" />
                   <h2 className="text-2xl font-semibold mb-2">Create from Scratch</h2>
                   <p className="text-muted-foreground mb-6">
-                    Build a professional CV using our smart form. Our AI will generate a modern, polished document.
+                    Build a professional CV using our smart form. Your data is saved automatically.
                   </p>
                   <Button className="gap-2 w-full bg-primary text-primary-foreground hover:bg-primary/90">
                     Get Started
@@ -58,11 +131,46 @@ export default function CVMakerPage() {
                   </Button>
                 </Card>
               </div>
+
+              {/* Show existing CV option if data exists */}
+              {cvData.fullName && (
+                <Card className="p-6 mt-8 bg-primary/5 border-primary/20">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="font-semibold text-foreground mb-1">You have a saved CV</h3>
+                      <p className="text-sm text-muted-foreground">for {cvData.fullName}</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button variant="outline" className="gap-2 bg-transparent" onClick={() => setMode("preview")}>
+                        <FileText size={16} />
+                        View Preview
+                      </Button>
+                      <Button
+                        className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
+                        onClick={() => setMode("create")}
+                      >
+                        <Plus size={16} />
+                        Edit CV
+                      </Button>
+                    </div>
+                  </div>
+                </Card>
+              )}
             </>
           ) : mode === "create" ? (
-            <CVCreateForm onBack={() => setMode("select")} />
-          ) : (
+            <CVCreateForm
+              formData={cvData}
+              onInputChange={handleInputChange}
+              onArrayChange={handleArrayChange}
+              onAddExperience={addExperience}
+              onAddEducation={addEducation}
+              onPreview={handleGeneratePreview}
+              onBack={() => setMode("select")}
+            />
+          ) : mode === "upload" ? (
             <CVUploadForm onBack={() => setMode("select")} />
+          ) : (
+            <CVPreview data={cvData} />
           )}
         </div>
       </div>
@@ -72,45 +180,23 @@ export default function CVMakerPage() {
   )
 }
 
-function CVCreateForm({ onBack }: { onBack: () => void }) {
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    location: "",
-    summary: "",
-    experience: [{ title: "", company: "", duration: "", description: "" }],
-    education: [{ school: "", degree: "", field: "", year: "" }],
-    skills: "",
-    certifications: "",
-  })
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
-
-  const handleArrayChange = (index: number, field: string, value: string, category: "experience" | "education") => {
-    setFormData((prev) => ({
-      ...prev,
-      [category]: prev[category].map((item, i) => (i === index ? { ...item, [field]: value } : item)),
-    }))
-  }
-
-  const addExperience = () => {
-    setFormData((prev) => ({
-      ...prev,
-      experience: [...prev.experience, { title: "", company: "", duration: "", description: "" }],
-    }))
-  }
-
-  const addEducation = () => {
-    setFormData((prev) => ({
-      ...prev,
-      education: [...prev.education, { school: "", degree: "", field: "", year: "" }],
-    }))
-  }
-
+function CVCreateForm({
+  formData,
+  onInputChange,
+  onArrayChange,
+  onAddExperience,
+  onAddEducation,
+  onPreview,
+  onBack,
+}: {
+  formData: CVData
+  onInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
+  onArrayChange: (index: number, field: string, value: string, category: "experience" | "education") => void
+  onAddExperience: () => void
+  onAddEducation: () => void
+  onPreview: () => void
+  onBack: () => void
+}) {
   return (
     <form className="space-y-8">
       <div className="flex justify-between items-center mb-6">
@@ -129,7 +215,7 @@ function CVCreateForm({ onBack }: { onBack: () => void }) {
             name="fullName"
             placeholder="Full Name"
             value={formData.fullName}
-            onChange={handleInputChange}
+            onChange={onInputChange}
             className="px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
           />
           <input
@@ -137,7 +223,7 @@ function CVCreateForm({ onBack }: { onBack: () => void }) {
             name="email"
             placeholder="Email"
             value={formData.email}
-            onChange={handleInputChange}
+            onChange={onInputChange}
             className="px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
           />
           <input
@@ -145,7 +231,7 @@ function CVCreateForm({ onBack }: { onBack: () => void }) {
             name="phone"
             placeholder="Phone"
             value={formData.phone}
-            onChange={handleInputChange}
+            onChange={onInputChange}
             className="px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
           />
           <input
@@ -153,7 +239,7 @@ function CVCreateForm({ onBack }: { onBack: () => void }) {
             name="location"
             placeholder="Location"
             value={formData.location}
-            onChange={handleInputChange}
+            onChange={onInputChange}
             className="px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
@@ -161,7 +247,7 @@ function CVCreateForm({ onBack }: { onBack: () => void }) {
           name="summary"
           placeholder="Professional Summary (2-3 sentences about yourself)"
           value={formData.summary}
-          onChange={handleInputChange}
+          onChange={onInputChange}
           rows={3}
           className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
         />
@@ -171,7 +257,7 @@ function CVCreateForm({ onBack }: { onBack: () => void }) {
       <div className="bg-card p-6 rounded-lg border border-border space-y-4">
         <div className="flex justify-between items-center">
           <h3 className="text-xl font-semibold">Experience</h3>
-          <Button type="button" onClick={addExperience} variant="outline" size="sm" className="gap-2 bg-transparent">
+          <Button type="button" onClick={onAddExperience} variant="outline" size="sm" className="gap-2 bg-transparent">
             <Plus size={16} /> Add
           </Button>
         </div>
@@ -181,7 +267,7 @@ function CVCreateForm({ onBack }: { onBack: () => void }) {
               type="text"
               placeholder="Job Title"
               value={exp.title}
-              onChange={(e) => handleArrayChange(i, "title", e.target.value, "experience")}
+              onChange={(e) => onArrayChange(i, "title", e.target.value, "experience")}
               className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
             />
             <div className="grid md:grid-cols-2 gap-3">
@@ -189,21 +275,21 @@ function CVCreateForm({ onBack }: { onBack: () => void }) {
                 type="text"
                 placeholder="Company"
                 value={exp.company}
-                onChange={(e) => handleArrayChange(i, "company", e.target.value, "experience")}
+                onChange={(e) => onArrayChange(i, "company", e.target.value, "experience")}
                 className="px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
               />
               <input
                 type="text"
                 placeholder="Duration (e.g., 2020-2023)"
                 value={exp.duration}
-                onChange={(e) => handleArrayChange(i, "duration", e.target.value, "experience")}
+                onChange={(e) => onArrayChange(i, "duration", e.target.value, "experience")}
                 className="px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
             <textarea
               placeholder="Description of responsibilities and achievements"
               value={exp.description}
-              onChange={(e) => handleArrayChange(i, "description", e.target.value, "experience")}
+              onChange={(e) => onArrayChange(i, "description", e.target.value, "experience")}
               rows={2}
               className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
             />
@@ -215,7 +301,7 @@ function CVCreateForm({ onBack }: { onBack: () => void }) {
       <div className="bg-card p-6 rounded-lg border border-border space-y-4">
         <div className="flex justify-between items-center">
           <h3 className="text-xl font-semibold">Education</h3>
-          <Button type="button" onClick={addEducation} variant="outline" size="sm" className="gap-2 bg-transparent">
+          <Button type="button" onClick={onAddEducation} variant="outline" size="sm" className="gap-2 bg-transparent">
             <Plus size={16} /> Add
           </Button>
         </div>
@@ -225,7 +311,7 @@ function CVCreateForm({ onBack }: { onBack: () => void }) {
               type="text"
               placeholder="School/University"
               value={edu.school}
-              onChange={(e) => handleArrayChange(i, "school", e.target.value, "education")}
+              onChange={(e) => onArrayChange(i, "school", e.target.value, "education")}
               className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
             />
             <div className="grid md:grid-cols-3 gap-3">
@@ -233,21 +319,21 @@ function CVCreateForm({ onBack }: { onBack: () => void }) {
                 type="text"
                 placeholder="Degree"
                 value={edu.degree}
-                onChange={(e) => handleArrayChange(i, "degree", e.target.value, "education")}
+                onChange={(e) => onArrayChange(i, "degree", e.target.value, "education")}
                 className="px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
               />
               <input
                 type="text"
                 placeholder="Field of Study"
                 value={edu.field}
-                onChange={(e) => handleArrayChange(i, "field", e.target.value, "education")}
+                onChange={(e) => onArrayChange(i, "field", e.target.value, "education")}
                 className="px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
               />
               <input
                 type="text"
                 placeholder="Year"
                 value={edu.year}
-                onChange={(e) => handleArrayChange(i, "year", e.target.value, "education")}
+                onChange={(e) => onArrayChange(i, "year", e.target.value, "education")}
                 className="px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
@@ -262,7 +348,7 @@ function CVCreateForm({ onBack }: { onBack: () => void }) {
           name="skills"
           placeholder="List skills separated by commas (e.g., React, TypeScript, Project Management)"
           value={formData.skills}
-          onChange={handleInputChange}
+          onChange={onInputChange}
           rows={3}
           className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
         />
@@ -275,7 +361,7 @@ function CVCreateForm({ onBack }: { onBack: () => void }) {
           name="certifications"
           placeholder="List certifications separated by commas (e.g., AWS Certified, Google Analytics Certified)"
           value={formData.certifications}
-          onChange={handleInputChange}
+          onChange={onInputChange}
           rows={2}
           className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
         />
@@ -286,9 +372,9 @@ function CVCreateForm({ onBack }: { onBack: () => void }) {
         <Button onClick={onBack} variant="outline" className="flex-1 bg-transparent">
           Cancel
         </Button>
-        <Button className="flex-1 gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
-          Generate CV
-          <FileText size={16} />
+        <Button onClick={onPreview} className="flex-1 gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
+          <Save size={16} />
+          Preview & Save CV
         </Button>
       </div>
     </form>
@@ -311,7 +397,8 @@ function CVUploadForm({ onBack }: { onBack: () => void }) {
     // Simulate processing
     setTimeout(() => {
       setIsProcessing(false)
-      alert("CV uploaded and processed successfully!")
+      alert("CV uploaded and processed successfully! It's been saved to your dashboard.")
+      onBack()
     }, 2000)
   }
 

@@ -27,6 +27,8 @@ export function Navbar() {
         links.push({ label: "My Dashboard", href: "/dashboard" })
       } else if (userType === "employer") {
         links.push({ label: "Employer Dashboard", href: "/employer" })
+      } else if (userType === "startup") {
+        links.push({ label: "Startup Dashboard", href: "/startup-dashboard" })
       }
     } else {
       links.splice(2, 0, { label: "CV Maker", href: "/cv-maker" })
