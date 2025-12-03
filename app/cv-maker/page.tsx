@@ -184,7 +184,7 @@ export default function CVMakerPage() {
           ) : mode === "upload" ? (
             <CVUploadForm onBack={() => setMode("select")} />
           ) : (
-            <CVPreview data={cvData} />
+            <CVPreview data={cvData} onBack={() => setMode("create")} />
           )}
         </div>
       </div>
