@@ -1,30 +1,36 @@
 # TrustBridge SL platform
+Job Matching Platform (Frontend + ML Model)
 
-*Automatically synced with your [v0.app](https://v0.app) deployments*
+This project is part of a Hackathon solution that matches job seekers to relevant job listings using a sentence-transformer ML model, combined with a Next.js frontend.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/infowatchmann-8416s-projects/v0-trust-bridge-sl-platform)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/jggT3yG4ME1)
+🚀 Project Overview
 
-## Overview
+The system consists of:
 
-This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
+Frontend (Next.js) – UI for job search, categories, filters, and job listings.
 
-## Deployment
+Job Matching Model – A fine-tuned sentence-transformer that converts job descriptions & user skills into embeddings for similarity matching.
 
-Your project is live at:
+Backend (Handled by team) – Authentication, job storage, API endpoints, admin dashboard, etc.
 
-**[https://vercel.com/infowatchmann-8416s-projects/v0-trust-bridge-sl-platform](https://vercel.com/infowatchmann-8416s-projects/v0-trust-bridge-sl-platform)**
+Your task in this project includes:
 
-## Build your app
+Building the user interface.
 
-Continue building your app on:
+Training the sentence-transformer model.
 
-**[https://v0.app/chat/jggT3yG4ME1](https://v0.app/chat/jggT3yG4ME1)**
+Saving & exporting embeddings for integration by the backend team.
 
-## How It Works
-
-1. Create and modify your project using [v0.app](https://v0.app)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+📁 Repository Structure
+Hackathon001/
+│
+├── frontend/                  # Next.js application (UI)
+│
+├── model/                     # ML training notebooks & saved files
+│   ├── training_notebook.ipynb
+│   ├── config.json            # Model configuration
+│   ├── pytorch_model.bin      # Learned model weights
+│   ├── tokenizer.json         # Tokenizer used by the model
+│   ├── job_embeddings.pt      # Saved job embeddings (torch tensor)
+│
+└── README.md
