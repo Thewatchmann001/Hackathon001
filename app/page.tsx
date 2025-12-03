@@ -114,27 +114,15 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Hero Image - Generated visual */}
+            {/* Hero Image - Professional job search visualization */}
             <div className="hidden md:flex justify-end">
-              <div className="relative w-full max-w-md h-96">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/30 rounded-3xl blur-3xl" />
-                <div className="relative h-full bg-gradient-to-br from-primary/20 via-accent/20 to-primary/10 rounded-3xl border-2 border-primary/30 flex items-center justify-center overflow-hidden">
-                  <svg
-                    className="w-32 h-32 text-primary/60"
-                    viewBox="0 0 100 100"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle cx="50" cy="35" r="15" fill="currentColor" opacity="0.6" />
-                    <path
-                      d="M 25 60 Q 25 50 50 50 Q 75 50 75 60 L 75 80 Q 75 85 70 85 L 30 85 Q 25 85 25 80 Z"
-                      fill="currentColor"
-                      opacity="0.6"
-                    />
-                    <rect x="35" y="65" width="8" height="15" fill="currentColor" opacity="0.4" />
-                    <rect x="57" y="65" width="8" height="15" fill="currentColor" opacity="0.4" />
-                  </svg>
-                </div>
+              <div className="relative w-full max-w-md h-96 rounded-3xl overflow-hidden shadow-2xl">
+                <img
+                  src="/job-search-hero.jpg"
+                  alt="Professional using laptop for job search with AI-powered interface"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent" />
               </div>
             </div>
           </div>
