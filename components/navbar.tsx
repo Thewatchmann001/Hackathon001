@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Menu, X, LogOut } from "lucide-react"
 import { useAuth } from "@/lib/auth-context"
@@ -44,11 +45,11 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo - Enhanced */}
-          <Link
-            href="/"
-            className="font-bold text-xl bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent"
-          >
-            TrustBridge SL
+          <Link href="/" className="flex items-center gap-2">
+            <Image src="/trustbridge-logo.png" alt="TrustBridge SL" width={40} height={40} className="h-10 w-auto" />
+            <span className="hidden sm:inline font-bold text-lg bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              TrustBridge SL
+            </span>
           </Link>
 
           {/* Desktop Navigation */}

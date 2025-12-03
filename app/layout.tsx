@@ -14,21 +14,8 @@ export const metadata: Metadata = {
     "The AI-powered job marketplace connecting Sierra Leone's talent to the right opportunities, employers, and investors.",
   generator: "v0.app",
   icons: {
-    icon: [
-      {
-        url: "/icon-light-32x32.png",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/icon-dark-32x32.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/icon.svg",
-        type: "image/svg+xml",
-      },
-    ],
-    apple: "/apple-icon.png",
+    icon: "/trustbridge-logo.png",
+    apple: "/trustbridge-logo.png",
   },
 }
 
